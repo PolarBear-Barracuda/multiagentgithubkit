@@ -13,6 +13,7 @@ Usage (CI runs these; you can run them locally against a context directory):
   gov.py stale-claims    --config .github/agents.yml --repo OWNER/REPO [--dry-run]
   gov.py sync-labels     --config .github/agents.yml --labels .github/labels.yml [--repo OWNER/REPO] [--dry-run]
   gov.py eval-score      --results evals/results --seeds evals/review-seeds [--config .github/agents.yml]
+  gov.py ruleset-audit   --repo OWNER/REPO --expected .github/rulesets/main-protection.json [--open-issue]
 """
 from __future__ import annotations
 
@@ -68,6 +69,11 @@ def main(argv=None) -> int:
     p.add_argument("--seeds", required=True)
     p.add_argument("--config")
 
+    p = sub.add_parser("ruleset-audit")
+    p.add_argument("--repo", required=True)
+    p.add_argument("--expected", required=True)
+    p.add_argument("--open-issue", action="store_true")
+
     a = ap.parse_args(argv)
 
     if a.cmd in PR_CHECKS or a.cmd == "linked-issue":
@@ -110,6 +116,9 @@ def main(argv=None) -> int:
             fams = {ag.id: ag.family for ag in load_config(a.config).agents}
         sys.stdout.write(evalscore.render(evalscore.score(a.results, a.seeds), fams))
         return 0
+    if a.cmd == "ruleset-audit":
+        import rulesetaudit
+        return rulesetaudit.run(a.repo, a.expected, a.open_issue).emit()
     return 2
 
 

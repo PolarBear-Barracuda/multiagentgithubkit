@@ -1,0 +1,34 @@
+name: governance-watchdog
+
+# Every 6 hours: compare the live branch ruleset with .github/rulesets/main-protection.json.
+# If it was deleted, disabled or weakened, open (or update) an issue labeled
+# needs-human-decision so the owner is notified.
+
+on:
+  schedule:
+    - cron: "43 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            .github
+            scripts/governance
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml
+      - name: Audit ruleset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/governance/gov.py ruleset-audit --repo "$GITHUB_REPOSITORY" --expected .github/rulesets/main-protection.json --open-issue

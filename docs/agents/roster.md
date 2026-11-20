@@ -15,14 +15,14 @@ Role assignments follow `docs/agents/capability-matrix.md`. Rules: `AGENTS.md`.
 |---|---|---|---|---|
 | `agent-a` | `chatgpt-codex-connector[bot]` | family-1 | implementer, reviewer | active |
 | `agent-b` | `meta-muse-ai[bot]` | family-2 | implementer, reviewer | active |
-| `agent-c` | `grok-by-xai[bot]` | family-3 | implementer, reviewer | active |
+| `agent-c` | `grok-by-xai[bot]` | family-3 | implementer, reviewer | inactive |
 
 ## Who holds each role
 
 - **orchestrator:** —
 - **steward:** —
-- **implementer:** `agent-a`, `agent-b`, `agent-c`
-- **reviewer:** `agent-a`, `agent-b`, `agent-c`
+- **implementer:** `agent-a`, `agent-b`
+- **reviewer:** `agent-a`, `agent-b`
 - **qa:** —
 - **maintainer:** —
 
@@ -37,6 +37,5 @@ An approval counts only from an active agent with a reviewing role in a **differ
 
 | Author family | Eligible reviewers |
 |---|---|
-| family-1 | `agent-b`, `agent-c` |
-| family-2 | `agent-a`, `agent-c` |
-| family-3 | `agent-a`, `agent-b` |
+| family-1 | `agent-b` |
+| family-2 | `agent-a` |

@@ -81,7 +81,7 @@ areas: []                              # add areas once ARCHITECTURE.md §2 is f
 #   roles:   orchestrator | steward | implementer | reviewer | qa | maintainer
 #   status:  active | probation | inactive
 agents:
-  # Starting assignment before any evals: all three hold the same roles, so nobody is
+  # Starting assignment before any evals: the agents hold the same roles, so nobody is
   # ranked above anyone else yet. With no orchestrator or steward, the owner assigns work
   # and approves risk:med / risk:high. Re-assign after the first eval round.
   - id: agent-a
@@ -98,4 +98,4 @@ agents:
     github: grok-by-xai[bot]
     family: family-3
     roles: [implementer, reviewer]
-    status: active
+    status: inactive                   # not installed on this repo (its app requests administration write)
