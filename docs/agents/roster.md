@@ -13,9 +13,9 @@ Role assignments follow `docs/agents/capability-matrix.md`. Rules: `AGENTS.md`.
 
 | ID | GitHub identity | Family | Roles | Status |
 |---|---|---|---|---|
-| `agent-a` | `TODO-agent-a-login[bot]` | family-1 | implementer, reviewer | active |
-| `agent-b` | `TODO-agent-b-login[bot]` | family-2 | implementer, reviewer | active |
-| `agent-c` | `TODO-agent-c-login[bot]` | family-3 | implementer, reviewer | active |
+| `agent-a` | `chatgpt-codex-connector[bot]` | family-1 | implementer, reviewer | active |
+| `agent-b` | `meta-muse-ai[bot]` | family-2 | implementer, reviewer | active |
+| `agent-c` | `grok-by-xai[bot]` | family-3 | implementer, reviewer | active |
 
 ## Who holds each role
 

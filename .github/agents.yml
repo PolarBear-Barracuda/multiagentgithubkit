@@ -85,17 +85,17 @@ agents:
   # ranked above anyone else yet. With no orchestrator or steward, the owner assigns work
   # and approves risk:med / risk:high. Re-assign after the first eval round.
   - id: agent-a
-    github: TODO-agent-a-login[bot]    # replace with the app's login, e.g. <app-slug>[bot]
+    github: chatgpt-codex-connector[bot]
     family: family-1
     roles: [implementer, reviewer]
     status: active
   - id: agent-b
-    github: TODO-agent-b-login[bot]
+    github: meta-muse-ai[bot]
     family: family-2
     roles: [implementer, reviewer]
     status: active
   - id: agent-c
-    github: TODO-agent-c-login[bot]
+    github: grok-by-xai[bot]
     family: family-3
     roles: [implementer, reviewer]
     status: active
