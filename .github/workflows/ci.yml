@@ -1,0 +1,41 @@
+name: ci
+
+# Project CI. The job names `lint` and `test` are required status checks.
+# Put your real commands in scripts/ci/lint.sh and scripts/ci/test.sh (protected paths).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # TODO: add language setup (e.g. actions/setup-python, actions/setup-node) and caching here.
+      - name: Lint
+        run: bash scripts/ci/lint.sh
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # TODO: add language setup and caching here.
+      - name: Test
+        run: bash scripts/ci/test.sh

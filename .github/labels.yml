@@ -1,0 +1,23 @@
+# Label set. Synced to GitHub by .github/workflows/sync-labels.yml (agent:<id> labels
+# are generated from .github/agents.yml automatically).
+- {name: "status:ready",          color: "0e8a16", description: "Assigned and ready to claim"}
+- {name: "status:claimed",        color: "fbca04", description: "An agent is working on this"}
+- {name: "status:in-review",      color: "1d76db", description: "PR ready for review"}
+- {name: "status:blocked",        color: "b60205", description: "Waiting on something outside the agent's control"}
+- {name: "risk:low",              color: "c2e0c6", description: "Local, easily reverted"}
+- {name: "risk:med",              color: "f9d0c4", description: "Crosses modules or changes user-visible behavior"}
+- {name: "risk:high",             color: "e99695", description: "Hard to reverse or security-relevant; owner approval required"}
+- {name: "role:orchestrator",     color: "d4c5f9", description: "Work for the orchestrator role"}
+- {name: "role:steward",          color: "d4c5f9", description: "Work for the architecture steward role"}
+- {name: "role:implementer",      color: "d4c5f9", description: "Work for the implementer role"}
+- {name: "role:reviewer",         color: "d4c5f9", description: "Work for the reviewer role"}
+- {name: "role:qa",               color: "d4c5f9", description: "Work for the QA role"}
+- {name: "role:maintainer",       color: "d4c5f9", description: "Work for the maintainer role"}
+- {name: "type:feature",          color: "a2eeef", description: "New behavior"}
+- {name: "type:bug",              color: "d73a4a", description: "Something is broken"}
+- {name: "type:chore",            color: "ededed", description: "Maintenance"}
+- {name: "type:adr",              color: "5319e7", description: "Architecture decision proposal"}
+- {name: "type:decision",         color: "5319e7", description: "Decision request for the owner"}
+- {name: "needs-human-decision",  color: "b60205", description: "Blocked until the owner decides; blocks merge"}
+- {name: "test-change-approved",  color: "006b75", description: "Owner approved removing/loosening tests (counts only if applied by an owner)"}
+- {name: "large-diff-approved",   color: "006b75", description: "Owner approved exceeding the diff size limit (counts only if applied by an owner)"}

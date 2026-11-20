@@ -1,0 +1,14 @@
+# CODEOWNERS — governance paths always need the human owner's review.
+# Replace @PolarBear-Barracuda. Area ownership for agents is enforced by the risk-gate
+# check (areas in .github/agents.yml), because GitHub App identities can't be listed here.
+# Later rules override earlier ones for the same path.
+
+/AGENTS.md                 @PolarBear-Barracuda
+/ARCHITECTURE.md           @PolarBear-Barracuda
+/.github/                  @PolarBear-Barracuda
+/scripts/governance/       @PolarBear-Barracuda
+/scripts/setup/            @PolarBear-Barracuda
+/scripts/ci/               @PolarBear-Barracuda
+/docs/agents/              @PolarBear-Barracuda
+/docs/adr/                 @PolarBear-Barracuda
+/evals/                    @PolarBear-Barracuda

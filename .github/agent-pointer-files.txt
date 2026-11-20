@@ -1,0 +1,6 @@
+# Tool-specific instruction files that should only point to AGENTS.md.
+# Add one repo-relative path per line: the default instruction filename that each of
+# your agents' tools reads (check each tool's documentation). Then run:
+#   scripts/setup/write-pointer-files.sh
+# Every path listed here is automatically protected (agents can't edit it).
+# Lines starting with # are ignored.

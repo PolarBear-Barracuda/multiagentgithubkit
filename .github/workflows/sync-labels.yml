@@ -1,0 +1,30 @@
+name: sync-labels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/labels.yml
+      - .github/agents.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml
+      - name: Sync labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/governance/gov.py sync-labels --config .github/agents.yml --labels .github/labels.yml --repo "$GITHUB_REPOSITORY"

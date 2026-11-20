@@ -1,0 +1,38 @@
+# One file per agent per round: evals/results/YYYY-MM-DD-<agent-id>.yml
+# Files starting with "_" are ignored by the scorer.
+agent: agent-b
+date: 2026-01-15
+model_version: "record the exact model/version string the agent ran on"
+
+implement:
+  - task: T01
+    ci_pass_first_push: true
+    accepted: true          # mergeable as-is or with suggestions only
+    in_scope: true
+  - task: T02
+    ci_pass_first_push: false
+    accepted: true
+    in_scope: true
+
+review:
+  - seed: R01
+    found: [B1]             # answer-key bug ids correctly flagged as [blocking]
+    false_positives: 1      # [blocking] comments that were not real problems
+  - seed: R02-clean
+    found: []
+    false_positives: 0
+
+planning:
+  - task: P01
+    decomposition: 4        # 1-5
+    criteria_testable: 5    # 1-5
+    escalated_correctly: true
+
+design:
+  - task: D01
+    quality: 4              # 1-5
+
+tests:
+  - task: Q01
+    mutants_killed: 18
+    mutants_total: 24

@@ -1,0 +1,146 @@
+name: agent-governance
+
+# Enforces AGENTS.md on every pull request. Each job name below is a required status
+# check in .github/rulesets/main-protection.json.
+#
+# Security notes:
+# - Uses `pull_request` (not `pull_request_target`), so PR code never runs with write access.
+# - Governance scripts and agents.yml are taken from the BASE branch, so a PR can't
+#   weaken the checks that judge it. Changes to this workflow itself need code-owner
+#   (human) review through CODEOWNERS + the ruleset.
+# - No PR-controlled text (title, body, branch name) is interpolated into shell commands.
+# - Consider pinning actions to full commit SHAs.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled, ready_for_review, converted_to_draft]
+  pull_request_review:
+    types: [submitted, dismissed, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: agent-governance-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    name: collect-context
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          path: pr
+          persist-credentials: false
+
+      - name: Check out governance code from the base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: gov
+          persist-credentials: false
+          sparse-checkout: |
+            .github
+            scripts/governance
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pyyaml
+
+      - name: Collect PR context
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git -C pr fetch --no-tags --quiet origin "$BASE_SHA" || true
+          bash gov/scripts/governance/collect_context.sh pr gov ctx
+
+      - name: Upload context
+        uses: actions/upload-artifact@v4
+        with:
+          name: gov-context
+          path: |
+            ctx
+            gov/scripts/governance
+          retention-days: 3
+
+  check:
+    name: ${{ matrix.check.name }}
+    needs: collect
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        check:
+          - { name: pr-hygiene,      cmd: hygiene }
+          - { name: scope-check,     cmd: scope }
+          - { name: protected-paths, cmd: protected }
+          - { name: test-weakening,  cmd: weakening }
+          - { name: risk-gate,       cmd: riskgate }
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: gov-context
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pyyaml
+
+      - name: Run ${{ matrix.check.name }}
+        env:
+          CHECK: ${{ matrix.check.cmd }}
+        run: python gov/scripts/governance/gov.py "$CHECK" --context ctx
+
+  config-valid:
+    name: config-valid
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out PR head (config under review)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: pr
+          persist-credentials: false
+          sparse-checkout: |
+            .github
+            docs/agents
+
+      - name: Check out validator from the base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: gov
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/governance
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pyyaml
+
+      - name: Validate agents.yml and roster
+        run: |
+          python gov/scripts/governance/gov.py validate-config \
+            --config pr/.github/agents.yml \
+            --roster pr/docs/agents/roster.md \
+            --pointer-files pr/.github/agent-pointer-files.txt

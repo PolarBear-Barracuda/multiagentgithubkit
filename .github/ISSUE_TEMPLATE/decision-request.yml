@@ -1,0 +1,42 @@
+name: Decision request
+description: Escalate a disagreement or stop-and-ask trigger to the owner (usually opened by the orchestrator).
+title: "[decision] "
+labels: ["type:decision", "needs-human-decision"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Where it came from
+      description: PR/issue links.
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Decision needed
+      description: One question, answerable with a choice.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: |
+        For each option: strongest case for it, evidence, cost if wrong, reversible (yes/no).
+        Be neutral — present each side as its proponent would.
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Orchestrator recommendation
+      description: One or two lines.
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      options:
+        - blocking active work
+        - can wait a few days
+    validations:
+      required: true

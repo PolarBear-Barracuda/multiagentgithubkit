@@ -1,0 +1,31 @@
+name: ADR proposal
+description: Propose an architecture decision. The owner accepts or rejects.
+title: "[adr] "
+labels: ["type:adr", "needs-human-decision"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What forces a decision now? Link evidence (benchmarks, incidents, issues).
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: At least two real alternatives, each with pros, cons, and cost if wrong.
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommendation
+      description: Which option and why, in a few sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: affected
+    attributes:
+      label: Affected areas and ADRs
+      description: Areas from .github/agents.yml and any ADRs this would supersede.

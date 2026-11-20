@@ -1,0 +1,101 @@
+# Agent roster and governance settings. Machine-readable source of truth.
+# Protected path: only the owner edits this file.
+# After editing: regenerate docs/agents/roster.md
+#   python scripts/governance/gov.py render-roster --config .github/agents.yml > docs/agents/roster.md
+# The config-valid CI check fails if the roster doc is out of date or this file is invalid.
+
+version: 1
+
+# Humans with final authority. Their PRs are exempt from agent-only checks, and
+# only labels they apply (test-change-approved, large-diff-approved, risk downgrades) count.
+owners:
+  - github: PolarBear-Barracuda
+
+settings:
+  max_diff_lines: 400                  # added + removed lines, excluding diff_size_exclude
+  diff_size_exclude:
+    - "**/*.lock"
+    - "**/package-lock.json"
+    - "**/pnpm-lock.yaml"
+    - "**/go.sum"
+    - "**/*.min.js"
+    - "**/*.snap"
+    - "**/generated/**"
+    - "**/vendor/**"
+  wip_limit_per_agent: 2               # open PRs per agent, including drafts
+  claim_draft_pr_hours: 4              # warn if no PR this long after claiming
+  claim_idle_hours: 24                 # release claim after this long without a PR or commits
+  require_approval_on_head: true       # approvals only count if given on the latest commit
+  high_risk_requires_agent_review: true  # risk:high = owner + a valid agent reviewer
+  authoring_roles: [implementer, qa, maintainer, steward]
+  reviewing_roles: [reviewer, steward]
+  pr_required_sections:
+    - "Linked issue"
+    - "Scope"
+    - "How I verified"
+    - "Risk"
+    - "What I'm unsure about"
+  scope_always_allowed: []             # globs any in-scope PR may also touch, e.g. "CHANGELOG.md"
+
+# Paths agents may not change. Leading "/" anchors to the repo root.
+# Files listed in .github/agent-pointer-files.txt are added to no_touch automatically.
+protected_paths:
+  no_touch:
+    - "/AGENTS.md"
+    - "/ARCHITECTURE.md"
+    - "/.github/**"
+    - "/scripts/governance/**"
+    - "/scripts/setup/**"
+    - "/scripts/ci/**"
+    - "/docs/agents/**"
+    - "/evals/**"
+  add_only:                            # agents may add new files here, never modify existing ones
+    - "/docs/adr/**"
+
+# Files counted as tests by the test-weakening check.
+test_patterns:
+  - "**/test_*.py"
+  - "**/*_test.py"
+  - "**/conftest.py"
+  - "**/tests/**"
+  - "**/test/**"
+  - "**/__tests__/**"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/*_test.go"
+  - "**/*Test.java"
+  - "**/*Tests.java"
+  - "**/*Test.kt"
+  - "**/*Tests.cs"
+  - "**/spec/**"
+
+# Areas of the codebase and the agent that owns each. risk:med PRs touching an area need
+# approval from its owner agent, a steward of a different family than the author, or a human owner.
+# Keep in sync with ARCHITECTURE.md §2.
+areas: []                              # add areas once ARCHITECTURE.md §2 is filled in
+
+# One entry per agent. Each must have its own GitHub identity.
+#   id:      short, lowercase; used in branch names and agent:<id> labels
+#   github:  login of the agent's identity (Apps: "<app-name>[bot]")
+#   family:  model family (agents from the same family can't approve each other's PRs)
+#   roles:   orchestrator | steward | implementer | reviewer | qa | maintainer
+#   status:  active | probation | inactive
+agents:
+  # Starting assignment before any evals: all three hold the same roles, so nobody is
+  # ranked above anyone else yet. With no orchestrator or steward, the owner assigns work
+  # and approves risk:med / risk:high. Re-assign after the first eval round.
+  - id: agent-a
+    github: TODO-agent-a-login[bot]    # replace with the app's login, e.g. <app-slug>[bot]
+    family: family-1
+    roles: [implementer, reviewer]
+    status: active
+  - id: agent-b
+    github: TODO-agent-b-login[bot]
+    family: family-2
+    roles: [implementer, reviewer]
+    status: active
+  - id: agent-c
+    github: TODO-agent-c-login[bot]
+    family: family-3
+    roles: [implementer, reviewer]
+    status: active

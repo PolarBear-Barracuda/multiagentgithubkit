@@ -1,0 +1,74 @@
+name: Task
+description: One unit of work for one agent — one issue, one branch, one PR.
+title: "[task] "
+labels: ["status:ready"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep it small: one PR under ~400 changed lines. The **In scope** list is enforced by CI —
+        the PR may only touch files matching these paths. Include test paths.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What and why, in two or three sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable behavior, one per line. Each must be checkable by a test.
+      placeholder: |
+        - [ ] GET /items?limit=0 returns 400 with error code "invalid_limit"
+        - [ ] Existing behavior for limit=1..100 is unchanged
+    validations:
+      required: true
+  - type: textarea
+    id: in_scope
+    attributes:
+      label: In scope
+      description: |
+        Paths or globs the PR may touch, ONE PER LINE, no prose. A folder like `src/api/`
+        covers everything under it. `**` matches any depth.
+      placeholder: |
+        src/api/items.py
+        tests/api/test_items.py
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope
+      description: Things not to do. Path-like lines (no spaces) are enforced by CI; prose lines are guidance.
+      placeholder: |
+        src/api/auth/**
+        Don't change the pagination format.
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk
+      description: The PR's risk label must be at least this.
+      options:
+        - risk:low
+        - risk:med
+        - risk:high
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: Role
+      options:
+        - implementer
+        - qa
+        - maintainer
+        - steward
+    validations:
+      required: true
+  - type: input
+    id: depends_on
+    attributes:
+      label: Depends on
+      description: Issues that must be merged first, e.g. "#12, #15". Leave empty if none.

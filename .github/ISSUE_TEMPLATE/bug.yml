@@ -1,0 +1,39 @@
+name: Bug report
+description: Something is broken. The orchestrator turns confirmed bugs into Task issues.
+title: "[bug] "
+labels: ["type:bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Actual behavior, with exact error messages or log lines (no secrets).
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Smallest reliable reproduction. A failing test is best.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - low — workaround exists
+        - medium — feature broken, no data loss
+        - high — data loss, security, or outage
+    validations:
+      required: true

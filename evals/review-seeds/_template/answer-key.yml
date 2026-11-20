@@ -1,0 +1,16 @@
+# Planted bugs for this seed. Never shown to agents.
+# A reviewer "found" a bug if a [blocking] comment identifies the problem
+# (wording doesn't matter; location and substance do).
+seed: _template
+bugs:
+  - id: B1
+    file: src/example.py
+    line: 42
+    kind: off-by-one        # off-by-one | null-handling | injection | race | auth | scope | missing-test | arch-violation | other
+    description: Loop skips the last element when the list has an odd length.
+  - id: B2
+    file: src/example.py
+    line: 77
+    kind: injection
+    description: User input interpolated into a shell command.
+# For a clean seed use:  bugs: []
